@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include <pthread.h>
 #include "MAN_csv.h"
 #include "gen_vector.h"
 #include "string_manipulation.h"
@@ -39,6 +40,9 @@ int main()
     file_names[2].word = "Nota3.txt";
     file_names[3].word = "Nota4.txt";
     file_names[4].word = "Nota5.txt";
+    
+    // threads
+    pthread_t th[5];
 
     while(opt != 'S'){
 
@@ -74,7 +78,7 @@ int main()
 
             case 'C':
                 
-                for(int index = 0; index < 3; index++){
+                for(int index = 0; index < 5; index++){
                     pFileName = OpenFileRead(file_names[index].word);    
                     recebe[index] = GenVector(recebe[index], pFileName, &MAX_LEN_VET[index] , &LEN_WORD_TEXT[index]);
                     fclose(pFileName);
@@ -89,7 +93,7 @@ int main()
                     break;
                 }
                 else
-                    for(int index = 0; index < 3; index++)
+                    for(int index = 0; index < 5; index++)
                         printf("%s => Palavras diferentes: %i\n",file_names[index].word, MAX_LEN_VET[index]);
                 break;
 
@@ -99,9 +103,9 @@ int main()
         }
     }
 
-    for(int index = 0; index < 3; index++){
+    for(int index = 0; index < 5; index++){
         FreeVector(recebe[index],MAX_LEN_VET[index]);
-        free(vector_string[index].word);
+        free(file_names[index].word);
     }
     
     free(vector_string);

@@ -5,6 +5,7 @@
 struct word{
   char* word;
   int num;
+  int* TFIDF;
 };
 typedef struct word Word;
 

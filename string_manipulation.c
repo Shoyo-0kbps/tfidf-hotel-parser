@@ -12,7 +12,8 @@ char* ToLowerString(char* ptr_string)
     return lower_string; 
 }
 
-int EndOfWord(char chr){ //  função ponta ja utilizada no exercio anterior
+int EndOfWord(char chr)
+{ //  função ponta ja utilizada no exercio anterior
     int index, FINAL_FLAG = 0;
     char ENDWRL[9] = {'\n', ' ', '.', ',', ';', ':', '-', '/', '='};
     int TAMFIMPAL = 9;
@@ -26,6 +27,20 @@ int EndOfWord(char chr){ //  função ponta ja utilizada no exercio anterior
     return FINAL_FLAG;
 }
 
+int IsValidChar(char* string)
+{
+    int index = 0;
+    
+    while(index < strlen(string)){
+        
+        if( ((int)string[index] >= 97 && (int)string[index] <= 122) || ((int)string[index] >= 43 && (int)string[index] <= 47) || ((int)string[index] >= 58 && (int)string[index] <= 63) )
+            index++;
+        else
+            return 1;
+    }
+    return 0;
+}
+
 MAN_String* SplitWords(MAN_String* string_vector, char* string, int* len_MAN_String)
 {
     //MAN_String* string_vector; // vetor de strings tratadas
@@ -35,6 +50,11 @@ MAN_String* SplitWords(MAN_String* string_vector, char* string, int* len_MAN_Str
     string_vector = (MAN_String*)calloc(1, sizeof(MAN_String));
     
     string = ToLowerString(string);
+    
+    if(strlen(string) > 20){
+        string_vector = NULL;
+        return string_vector;
+    }
 
     for(int index = 0; index < strlen(string); index++)
     {
@@ -55,7 +75,7 @@ MAN_String* SplitWords(MAN_String* string_vector, char* string, int* len_MAN_Str
         }else
             continue;
     }
-
+    
     string_vector[*len_MAN_String].word = calloc(strlen(ptr_start),sizeof(char)); // insere a ultima palavra com inicio apontada em ptr_start
     memcpy(string_vector[*len_MAN_String].word, ptr_start, strlen(string)- pos_ptr_start); // copia a string para o vetor de strings
     

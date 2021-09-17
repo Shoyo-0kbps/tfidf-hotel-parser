@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#define LENWORD 60
 
 void VerifyAllocation(void* pointer)
 {
@@ -114,7 +115,7 @@ Word* GenVector(Word* source, FILE* pFileName, int *len_source, int* LEN_WORD_TE
 {
     MAN_String* vector_string;
     int LEN_QUEUE = 0;
-    char* pword;
+    char pword[LENWORD];
     vector_string = NULL;
     while(1)
     {
@@ -122,15 +123,26 @@ Word* GenVector(Word* source, FILE* pFileName, int *len_source, int* LEN_WORD_TE
             break;
         else{
             vector_string = SplitWords(vector_string, pword, &LEN_QUEUE);
-            LEN_WORD_TEXT++;
+            if(vector_string == NULL)
+                continue;
+
             for(int index = 0; index <= LEN_QUEUE; index++){
-                if(strlen(vector_string[index].word) > 3)    
+                if( strlen(vector_string[index].word) > 3 && !IsValidChar(vector_string[index].word) ){   
                     source = InsertSort(source, len_source, vector_string[index].word);
+                    LEN_WORD_TEXT++;
+                }
                 else
                     continue;
             }
+            
+            memset(pword,'\0',LENWORD);
+            for(int index = 0; index < LEN_QUEUE; index++)
+                free(vector_string[index].word);        
+
             LEN_QUEUE = 0;
         }
     }
+    
+    free(vector_string);
     return source;
 }
